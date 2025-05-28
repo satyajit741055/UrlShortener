@@ -1,0 +1,2 @@
+1. First Configured models/User.model.ts and models.Url.model.ts 
+2. Configured config/dbConnect.ts

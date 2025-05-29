@@ -10,10 +10,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from 'lucide-react';
 import { loginType } from "@/features/auth/schemas/loginSchema";
+import {  useDispatch } from 'react-redux'
+import { login } from "@/features/reduxLogic/authReduxLogic/authSlice";
 
 const LoginPage = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const form = useForm<z.infer<typeof loginType>>({
     resolver: zodResolver(loginType),
@@ -31,8 +34,8 @@ const LoginPage = () => {
         description: response.data.message
       });
       console.log(response.data.token)
-      localStorage.setItem("token", response.data.token);
-      navigate('/homepage');
+      dispatch(login(response.data.token));
+      navigate('/');
     } catch (error: any) {
       console.error('Error during Login', error);
       let errorMessage = error.response?.data.message;

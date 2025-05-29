@@ -5,7 +5,7 @@ GET	/me	Get logged-in user info*/
 import { Request, Response } from "express";
 import bcrypt from "bcrypt"
 import UserModel from "../models/User.model";
-import { userType } from "../validations/user.validation";
+import { loginType, userType } from "../validations/user.validation";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
@@ -58,7 +58,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 
 export const login = async (req: Request, res: Response): Promise<void> => {
     try {
-        const parsedData = userType.safeParse(req.body)
+        const parsedData = loginType.safeParse(req.body)
         if (!parsedData.success) {
             res.status(400).json({
                 success: false,
@@ -67,9 +67,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             return;
         }
         
-        const { username, email, password } = parsedData.data;
+        const { email, password } = parsedData.data;
 
-        const user = await UserModel.findOne({ username });
+        const user = await UserModel.findOne({ email });
         if (!user) {
             res.status(400).json({
                 success: false,

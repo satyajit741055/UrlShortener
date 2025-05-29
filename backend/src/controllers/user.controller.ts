@@ -8,10 +8,11 @@ import UserModel from "../models/User.model";
 import { userType } from "../validations/user.validation";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { RequestHandler } from "express";
+
 dotenv.config();
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
+    console.log("Hare Krishna")
     try {
         const parsedData = userType.safeParse(req.body)
         if (!parsedData.success) {

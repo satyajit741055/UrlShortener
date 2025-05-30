@@ -12,7 +12,7 @@ import { getGeoLocation } from "../utils/getGeoLocation";
 
 export const short = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { originalUrl } = req.body;
+        const { url } = req.body;
         const userID = req.userId;
         const user = await UserModel.findById(userID);
         if (!user) {
@@ -24,7 +24,7 @@ export const short = async (req: Request, res: Response): Promise<void> => {
         }
         const newURL = new UrlModel(
             {
-                originalUrl,
+                originalUrl:url,
                 shortId: generateId(6),
                 user: user._id,
             }

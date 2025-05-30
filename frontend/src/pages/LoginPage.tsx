@@ -33,7 +33,7 @@ const LoginPage = () => {
       toast('success', {
         description: response.data.message
       });
-      console.log(response.data.token)
+      
       dispatch(login(response.data.token));
       navigate('/');
     } catch (error: any) {

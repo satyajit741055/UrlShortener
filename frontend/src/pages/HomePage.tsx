@@ -1,7 +1,8 @@
+import UrlShorten from "@/components/UrlShorten"
 
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <div><UrlShorten /></div>
   )
 }
 

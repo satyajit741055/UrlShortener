@@ -51,9 +51,9 @@ export const short = async (req: Request, res: Response): Promise<void> => {
 export const redirectToOriginalUrl = async (req: Request, res: Response): Promise<void> => {
     try {
         const { redirect } = req.params;
-        console.log(redirect)
+        
         const url = await UrlModel.findOne({ shortId: redirect });
-
+        console.log("from redirectTOOrignialURL :" ,url)
         if (!url) {
             res.status(404).json({ success: false, error: "URL not found" });
             return;
@@ -64,6 +64,7 @@ export const redirectToOriginalUrl = async (req: Request, res: Response): Promis
 
         // Get Geo Info
         const geoInfo = await getGeoLocation(ip);
+        
 
         // Push analytics
         const analyticsEntry = {
@@ -88,8 +89,13 @@ export const redirectToOriginalUrl = async (req: Request, res: Response): Promis
         url.analytics.push(analyticsEntry);
         await url.save();
 
-        // res.redirect(url.originalUrl.toString());
-        res.status(400).json({ success: true, url : url.originalUrl });
+        res.status(200).json({ 
+            success: true, 
+            url: url.originalUrl,
+            ip: ip,
+            country: geoInfo.country,
+            userAgent: req.get("User-Agent")
+         });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, error });

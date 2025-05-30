@@ -38,8 +38,10 @@ const UrlShorten = () => {
                 }
             );
             toast.success(response.data.message);
-            const generatedUrl = 'http://localhost:5000/api/' + response.data.shortId;
+            const generatedUrl = 'http://localhost:5173/' + response.data.shortId;
+
             setShortUrl(generatedUrl);
+
         } catch (error: any) {
             console.error('Error during URL shortening', error);
             toast.error(error.response?.data?.message || "Something went wrong");

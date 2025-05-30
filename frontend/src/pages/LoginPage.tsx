@@ -28,13 +28,17 @@ const LoginPage = () => {
 
   const onSubmit = async (data: z.infer<typeof loginType>) => {
     setIsSubmit(true);
+    console.log("DAta from loginpage :" , data)
     try {
       const response = await axios.post('http://localhost:5000/api/login', data);
       toast('success', {
         description: response.data.message
       });
-      
-      dispatch(login(response.data.token));
+
+      console.log("response from login:",response)
+      dispatch(login({token:response.data.token,
+        username : response.data.username
+      }));
       navigate('/');
     } catch (error: any) {
       console.error('Error during Login', error);

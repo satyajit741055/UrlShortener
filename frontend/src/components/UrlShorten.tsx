@@ -17,7 +17,7 @@ const UrlShorten = () => {
     const [shortUrl, setShortUrl] = useState('');
 
     const token = useSelector((state: RootState) => state.auth.token)
-    console.log(token)
+    console.log({token:token,username:''})
 
 
     const form = useForm<z.infer<typeof urlSchema>>({

@@ -22,7 +22,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
             })
             return;
         }
-        
+
         const { username, email, password } = parsedData.data;
         const hashedPassword = await bcrypt.hash(password, 5);
 
@@ -34,7 +34,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
             });
             return;
         }
-        
+
         const newUser = new UserModel({
             username,
             email,
@@ -66,7 +66,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             })
             return;
         }
-        
+
         const { email, password } = parsedData.data;
 
         const user = await UserModel.findOne({ email });
@@ -91,7 +91,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         res.status(200).json({
             success: true,
             message: "Login successful",
-            token: token
+            token: token,
+            username: user.username
         })
     }
     catch (error) {

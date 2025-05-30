@@ -3,18 +3,30 @@ import Signup from './pages/Signup'
 import LoginPage from './pages/LoginPage';
 import Layout from './layouts/Layout';
 import HomePage from './pages/HomePage';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import type { RootState } from './app/store';
 import RedirectPage from './pages/RedirectPage';
 import DashBoardPage from './pages/DashBoardPage';
+import AnalyticsPage from './pages/AnalyticsPage';
+import { login, logout } from './features/reduxLogic/authReduxLogic/authSlice';
 
 
 function App() {
   console.log("App rendered");
   const isDark = useSelector((state: RootState) => state.theme.isDark);
+  const dispatch = useDispatch()
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      dispatch(login({
+        token: token,
+        username: ''
+      }));
+    } else {
+      dispatch(logout());
+    }
     if (isDark) {
       document.documentElement.classList.add("dark");
     } else {
@@ -31,6 +43,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/homepage" element={<HomePage />} />
         <Route path="/dashboard" element={<DashBoardPage />} />
+        <Route path="/analytics/:shortId" element={<AnalyticsPage />} />
       </Route>
     </Routes>
   );

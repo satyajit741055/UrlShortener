@@ -104,6 +104,7 @@ export const redirectToOriginalUrl = async (req: Request, res: Response): Promis
 
 export const analytics = async (req: Request, res: Response): Promise<void> => {
     try {
+
         const { id } = req.params;
         console.log(id)
         const url = await UrlModel.findOne({ shortId: id });
@@ -117,9 +118,7 @@ export const analytics = async (req: Request, res: Response): Promise<void> => {
         }
 
         res.status(200).json({
-            success: true,
-            totalClicks: url.clicks,
-            analytics: url.analytics,
+            data:url
         });
 
     } catch (error) {

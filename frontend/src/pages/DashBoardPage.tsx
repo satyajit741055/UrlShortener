@@ -8,81 +8,90 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 interface UrlType {
-    _id: string;
-    shortId: string;
-    originalUrl: string;
-    clicks: number;
+  _id: string;
+  shortId: string;
+  originalUrl: string;
+  clicks: number;
+  createdAt: Date;
 }
 
 const DashBoardPage = () => {
-    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-    const token = useSelector((state: RootState) => state.auth.token)
-    const [isSubmit, setIsSubmit] = useState(false)
-    const [allUrl, setAllUrl] = useState<UrlType[]>([])
-    const [userName, setUserName] = useState('')
+  const { isAuthenticated, token, isAuthChecked } = useSelector((state: RootState) => state.auth);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [allUrl, setAllUrl] = useState<UrlType[]>([]);
+  const [userName, setUserName] = useState('');
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!isAuthenticated) {
-            navigate('/login');
-            return;
+  useEffect(() => {
+    if (!isAuthChecked) {
+      navigate('/login');
+      return;
+    };
+    if (!isAuthenticated || !token) return;
+
+    const fetchData = async () => {
+      try {
+        setIsSubmit(true);
+        const response = await axios.get('http://localhost:5000/api/me', {
+          headers: {
+            authorization: `Bearer ${token}`,
+          }
+        });
+
+        if (!response.data) {
+          throw new Error("Error while fetching data");
         }
 
-        const fetchData = async () => {
-            try {
-                setIsSubmit(true);
-                const response = await axios.get('http://localhost:5000/api/me', {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    }
-                });
+        setUserName(response.data.data.username);
+        setAllUrl(response.data.data.urls);
+      }
+      catch (error: any) {
+        console.error('Error during URL fetching', error);
+        toast.error(error.response?.data?.message || "Something went wrong");
+      } finally {
+        setIsSubmit(false);
+      }
+    }
 
-                if (!response.data) {
-                    throw new Error("Error while fetching data");
-                }
+    fetchData();
 
-                setUserName(response.data.data.username);
-                setAllUrl(response.data.data.urls);
-            }
-            catch (error: any) {
-                console.error('Error during URL fetching', error);
-                toast.error(error.response?.data?.message || "Something went wrong");
-            } finally {
-                setIsSubmit(false);
-            }
-        }
+  }, [isAuthenticated, token, navigate]);
 
-        fetchData();
-
-    }, [isAuthenticated, token, navigate]);
-
-    return (
-        <div className="max-w-3xl mx-auto p-4">
-            {isSubmit ? (
-                <div className="flex items-center justify-center space-x-2 text-gray-600 dark:text-gray-300">
-                    <Loader2 className="animate-spin h-6 w-6" />
-                    <span>Loading...</span>
-                </div>
-            ) : (
-                <>
-                    <h1 className="text-xl text-center font-semibold mb-4 text-gray-800 dark:text-gray-100">Hi, {userName}</h1>
-                    {allUrl.length === 0 ? (
-                        <p className="text-gray-600 dark:text-gray-400">No URLs found.</p>
-                    ) : (
-                        allUrl.map((url: UrlType) => (
-                            <Card
-                                key={url._id}
-                                shortUrl={`http://localhost:5173/${url.shortId}`}
-                                originalUrl={url.originalUrl}
-                                clicks={url.clicks}
-                            />
-                        ))
-                    )}
-                </>
-            )}
+  return (
+    <div className="max-w-4xl mx-auto p-6 sm:p-8 md:p-10 flex flex-col min-h-[70vh]">
+      {isSubmit ? (
+        <div className="flex flex-col items-center justify-center space-y-2 text-gray-600 dark:text-gray-300 mt-20">
+          <Loader2 className="animate-spin h-8 w-8" />
+          <span className="text-lg font-medium">Loading...</span>
         </div>
-    )
+      ) : (
+        <>
+          <h1 className="text-3xl md:text-4xl text-center font-extrabold mb-8 text-gray-800 dark:text-gray-100">
+            Hi, {userName || 'User'}
+          </h1>
+          {allUrl.length === 0 ? (
+            <p className="text-center text-gray-600 dark:text-gray-400 text-lg mt-8">
+              No URLs found.
+            </p>
+          ) : (
+            <div className="space-y-6">
+              {allUrl.map((url: UrlType) => (
+                <Card
+                  key={url._id}
+                  shortUrl={`http://localhost:5173/${url.shortId}`}
+                  originalUrl={url.originalUrl}
+                  clicks={url.clicks}
+                  createdAt={url.createdAt}
+                  shortId={url.shortId}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
 }
 
 export default DashBoardPage;

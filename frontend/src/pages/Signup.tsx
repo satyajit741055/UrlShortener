@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from 'lucide-react';
+import { API_BASE_URL_SAFE } from "@/config/api";
 
 const Signup = () => {
   const [isSubmit, setIsSubmit] = useState(false);
@@ -27,7 +28,7 @@ const Signup = () => {
   const onSubmit = async (data: z.infer<typeof userType>) => {
     setIsSubmit(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/signup', data);
+      const response = await axios.post(`${API_BASE_URL_SAFE}/api/signup`, data);
       toast.success(response.data.message);
       navigate('/homepage');
     } catch (error: any) {

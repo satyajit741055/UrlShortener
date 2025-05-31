@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import { API_BASE_URL_SAFE } from "@/config/api";
 
 export type AnalyticsType = {
   timestamp: string;
@@ -47,7 +48,7 @@ const AnalyticsPage = () => {
     const fetchData = async () => {
       try {
         setIsSubmit(true);
-        const response = await axios.get(`http://localhost:5000/api/analytics/${shortId}`, {
+        const response = await axios.get(`${API_BASE_URL_SAFE}/api/analytics/${shortId}`, {
           headers: {
             authorization: `Bearer ${token}`,
           },

@@ -6,7 +6,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import helmet from 'helmet';
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 10000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
 
 dotenv.config();
 const app = express();

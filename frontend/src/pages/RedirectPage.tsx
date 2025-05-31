@@ -1,3 +1,4 @@
+import { API_BASE_URL_SAFE } from "@/config/api";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -10,7 +11,7 @@ const RedirectPage = () => {
   useEffect(() => {
     const redirect = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/${shortId}`)
+        const response = await axios.get(`${API_BASE_URL_SAFE}/api/${shortId}`)
         console.log("response from RedirectPage: ",response)
         const redirectURL = response.data.url;
         

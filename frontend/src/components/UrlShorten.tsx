@@ -1,7 +1,7 @@
 import { urlSchema } from "@/features/urlShortener/schemas/urlSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -12,14 +12,16 @@ import { Button } from "./ui/button";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/app/store";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL_SAFE } from "@/config/api";
 
 const UrlShorten = () => {
     const [isSubmit, setIsSubmit] = useState(false);
     const [shortUrl, setShortUrl] = useState('');
     const navigate = useNavigate()
+    const [baseUrl, setBaseUrl] = useState("");
 
     const { isAuthenticated, token, isAuthChecked } = useSelector((state: RootState) => state.auth);
-    console.log({token:token,username:''})
+    console.log({ token: token, username: '' })
 
 
 
@@ -30,6 +32,12 @@ const UrlShorten = () => {
         }
     });
 
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setBaseUrl(window.location.origin);
+        }
+    })
+
     const onSubmit = async (data: z.infer<typeof urlSchema>) => {
         setIsSubmit(true);
         if (!isAuthChecked) return;
@@ -38,15 +46,15 @@ const UrlShorten = () => {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:5000/api/short/', data,
+            const response = await axios.post(`${API_BASE_URL_SAFE}/api/short/`, data,
                 {
                     headers: {
-                        authorization: `Bearer ${token}`, 
+                        authorization: `Bearer ${token}`,
                     },
                 }
             );
             toast.success(response.data.message);
-            const generatedUrl = 'http://localhost:5173/' + response.data.shortId;
+            const generatedUrl = `${baseUrl}` + response.data.shortId;
 
             setShortUrl(generatedUrl);
 

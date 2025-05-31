@@ -7,9 +7,7 @@ import bcrypt from "bcrypt"
 import UserModel from "../models/User.model";
 import { loginType, userType } from "../validations/user.validation";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 
-dotenv.config();
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
 

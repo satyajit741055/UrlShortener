@@ -49,11 +49,15 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-gray-100 to-blue-100 dark:from-gray-900 dark:to-gray-800 px-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl rounded-2xl p-8 transition-all duration-300">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-indigo-900 px-4 transition-colors duration-500">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl ring-1 ring-gray-200 dark:ring-gray-700 p-8 transition-all">
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">Welcome Back</h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Enter your details to continue</p>
+          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 via-blue-500 to-purple-500 text-transparent bg-clip-text">
+            Welcome Back
+          </h1>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+            Enter your details to continue
+          </p>
         </div>
 
         <Form {...form}>
@@ -63,11 +67,11 @@ const LoginPage = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm text-gray-700 dark:text-gray-300">Email Address</FormLabel>
+                  <FormLabel className="text-gray-700 dark:text-gray-300 text-sm">Email Address</FormLabel>
                   <Input
                     {...field}
                     placeholder="example@domain.com"
-                    className="dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500"
+                    className="dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 transition"
                   />
                   <FormMessage />
                 </FormItem>
@@ -79,19 +83,23 @@ const LoginPage = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm text-gray-700 dark:text-gray-300">Password</FormLabel>
+                  <FormLabel className="text-gray-700 dark:text-gray-300 text-sm">Password</FormLabel>
                   <Input
                     type="password"
                     {...field}
                     placeholder="••••••••"
-                    className="dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500"
+                    className="dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 transition"
                   />
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit" disabled={isSubmit} className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+            <Button
+              type="submit"
+              disabled={isSubmit}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 transition"
+            >
               {isSubmit ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -112,7 +120,7 @@ const LoginPage = () => {
 
         <div className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
           Don't have an account?{' '}
-          <Link to="/signup" className="text-blue-600 dark:text-blue-400 hover:underline">
+          <Link to="/signup" className="text-indigo-600 dark:text-indigo-400 hover:underline">
             Sign Up
           </Link>
         </div>

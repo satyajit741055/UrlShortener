@@ -5,7 +5,7 @@ GET	/my-urls	List all URLs of logged-in user (protected)*/
 
 import express from "express";
 import { analytics, short, redirectToOriginalUrl } from "../controllers/url.controller";
-import { authMiddleware } from "../middleware/auth";
+import { authMiddleware } from "../middlewares/auth";
 
 const router = express.Router();
 

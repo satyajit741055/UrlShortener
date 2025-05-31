@@ -25,34 +25,37 @@ const Signup = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof userType>) => {
-    console.log(data)
     setIsSubmit(true);
     try {
       const response = await axios.post('http://localhost:5000/api/signup', data);
-      toast('success', {
-        description: response.data.message
-      });
+      toast.success(response.data.message);
       navigate('/homepage');
     } catch (error: any) {
       console.error('Error during Sign-up', error);
-      let errorMessage = error.response?.data.message;
-      toast('Sign Up failed', {
-        description: errorMessage
-      });
+      let errorMessage = error.response?.data.message || "Something went wrong";
+      toast.error(errorMessage);
     } finally {
       setIsSubmit(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-indigo-900 px-4 transition-colors duration-500">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl ring-1 ring-gray-200 dark:ring-gray-700 p-8 transition-all">
+        {/* Optional: Add a logo here */}
+        {/* <img src="/logo.svg" alt="Logo" className="h-10 mx-auto mb-6" /> */}
+
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Sign Up</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Create an account to get started</p>
+          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 via-blue-500 to-purple-500 text-transparent bg-clip-text">
+            Sign Up
+          </h1>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+            Create an account to get started
+          </p>
         </div>
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <FormField
               name="username"
               control={form.control}
@@ -62,35 +65,52 @@ const Signup = () => {
                   <Input
                     {...field}
                     onChange={(e) => field.onChange(e)}
-                    className="dark:bg-gray-700 dark:text-white"
+                    className="dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 transition"
+                    placeholder="Your username"
                   />
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               name="email"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-300">Email</FormLabel>
-                  <Input {...field} className="dark:bg-gray-700 dark:text-white" />
+                  <Input
+                    {...field}
+                    className="dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 transition"
+                    placeholder="your@email.com"
+                  />
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               name="password"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-gray-700 dark:text-gray-300">Password</FormLabel>
-                  <Input type="password" {...field} className="dark:bg-gray-700 dark:text-white" />
+                  <Input
+                    type="password"
+                    {...field}
+                    className="dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 transition"
+                    placeholder="Enter a secure password"
+                  />
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmit } className="w-full">
+
+            <Button
+              type="submit"
+              disabled={isSubmit}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 transition"
+            >
               {isSubmit ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -102,7 +122,8 @@ const Signup = () => {
             </Button>
           </form>
         </Form>
-        <div className="text-center mt-4">
+
+        <div className="text-center mt-6">
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Already a member?{' '}
             <Link to="/login" className="text-blue-600 hover:underline dark:text-blue-400">

@@ -1,11 +1,10 @@
 import type { RootState } from '@/app/store'
 import Card from '@/components/Card';
-import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux'
+import {  useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+
 
 interface UrlType {
   _id: string;
@@ -16,10 +15,12 @@ interface UrlType {
 }
 
 const DashBoardPage = () => {
-  const { isAuthenticated, token, isAuthChecked } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, token, isAuthChecked ,username } = useSelector((state: RootState) => state.auth);
   const [isSubmit, setIsSubmit] = useState(false);
+  const urls = useSelector((state:RootState)=>state.url.urls)
   const [allUrl, setAllUrl] = useState<UrlType[]>([]);
-  const [userName, setUserName] = useState('');
+
+  
 
   const navigate = useNavigate();
 
@@ -29,33 +30,12 @@ const DashBoardPage = () => {
       return;
     };
     if (!isAuthenticated || !token) return;
+    setIsSubmit(true)
+    
+    setAllUrl(urls)
+    setIsSubmit(false)
 
-    const fetchData = async () => {
-      try {
-        setIsSubmit(true);
-        const response = await axios.get('http://localhost:5000/api/me', {
-          headers: {
-            authorization: `Bearer ${token}`,
-          }
-        });
-
-        if (!response.data) {
-          throw new Error("Error while fetching data");
-        }
-
-        setUserName(response.data.data.username);
-        setAllUrl(response.data.data.urls);
-      }
-      catch (error: any) {
-        console.error('Error during URL fetching', error);
-        toast.error(error.response?.data?.message || "Something went wrong");
-      } finally {
-        setIsSubmit(false);
-      }
-    }
-
-    fetchData();
-
+  
   }, [isAuthenticated, token, navigate]);
 
   return (
@@ -68,7 +48,7 @@ const DashBoardPage = () => {
       ) : (
         <>
           <h1 className="text-3xl md:text-4xl text-center font-extrabold mb-8 text-gray-800 dark:text-gray-100">
-            Hi, {userName || 'User'}
+            Hi, {username || 'User'}
           </h1>
           {allUrl.length === 0 ? (
             <p className="text-center text-gray-600 dark:text-gray-400 text-lg mt-8">

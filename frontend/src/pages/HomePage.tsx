@@ -1,11 +1,19 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UrlShorten from "@/components/UrlShorten";
 import type { RootState } from "@/app/store";
+import { useEffect, useState } from "react";
+import { getUrls } from "@/utils/getUrls";
+import { setUrls, type UrlType } from "@/features/reduxLogic/urlRedux/url.Slice";
+import { toast } from "sonner";
+import UrlCard from "@/components/UrlCard";
 
 const HomePage = () => {
-  const { isAuthenticated, username } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, username, token } = useSelector((state: RootState) => state.auth);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const dispatch = useDispatch();
+  const [recentUrls, setRecentUrls] = useState<UrlType[]>([]);
 
-  const recentUrls = [
+  const DummyData = [
     {
       id: "abc123",
       originalUrl: "https://www.example.com/very/long/url",
@@ -20,14 +28,30 @@ const HomePage = () => {
     },
   ];
 
+  useEffect(() => {
+    if (!isAuthenticated || !token) return;
+
+    (async () => {
+      try {
+        setIsSubmit(true);
+        const urls = await getUrls(token);
+        dispatch(setUrls(urls));
+        setRecentUrls(urls);
+      } catch (error: any) {
+        console.error("Error during URL fetching", error);
+        toast.error(error.response?.data?.message || "Something went wrong");
+      } finally {
+        setIsSubmit(false);
+      }
+    })();
+  }, [isAuthenticated, token, dispatch]);
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-100 to-white dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-gray-100 transition-colors duration-500">
       <header className="flex justify-between items-center max-w-7xl mx-auto p-4 sm:px-6 lg:px-8">
         <nav>
           {isAuthenticated ? (
-            <span className="font-semibold text-lg">
-              Hello, {username || "User"}
-            </span>
+            <span className="font-semibold text-lg">Hello, {username || "User"}</span>
           ) : (
             <a
               href="/login"
@@ -42,9 +66,7 @@ const HomePage = () => {
       {/* Hero Section */}
       <main className="flex-grow max-w-3xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
         <section className="text-center mb-16">
-          <h2 className="text-4xl font-extrabold mb-4 tracking-tight">
-            Shorten Your URLs Instantly
-          </h2>
+          <h2 className="text-4xl font-extrabold mb-4 tracking-tight">Shorten Your URLs Instantly</h2>
           <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-xl mx-auto">
             Generate short, manageable URLs and track every click with ease.
           </p>
@@ -92,34 +114,13 @@ const HomePage = () => {
             <h3 className="text-2xl font-bold mb-6">Your Recent Shortened URLs</h3>
             {recentUrls.length > 0 ? (
               <div className="space-y-4 overflow-x-auto">
-                {recentUrls.map(({ id, originalUrl, shortUrl, clicks }) => (
-                  <div
-                    key={id}
-                    className="flex flex-col sm:flex-row justify-between items-center bg-white dark:bg-gray-900 rounded-lg shadow-md p-5 transition-shadow hover:shadow-lg"
-                  >
-                    <a
-                      href={originalUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="truncate text-blue-600 hover:underline max-w-xs sm:max-w-md"
-                      title={originalUrl}
-                      aria-label={`Original URL: ${originalUrl}`}
-                    >
-                      {originalUrl}
-                    </a>
-                    <a
-                      href={shortUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-indigo-600 hover:text-indigo-800 sm:ml-6 font-medium transition-colors"
-                      aria-label={`Shortened URL: ${shortUrl}`}
-                    >
-                      {shortUrl}
-                    </a>
-                    <span className="mt-2 sm:mt-0 text-gray-500 dark:text-gray-400 text-sm select-none">
-                      {clicks} clicks
-                    </span>
-                  </div>
+                {recentUrls.map(({ _id, originalUrl, shortId, clicks }) => (
+                  <UrlCard
+                    key={_id}
+                    originalUrl={originalUrl}
+                    shortUrl={`http://localhost:5173/${shortId}`}
+                    clicks={clicks}
+                  />
                 ))}
               </div>
             ) : (
@@ -130,7 +131,24 @@ const HomePage = () => {
           </section>
         ) : (
           <section className="text-center mt-16 max-w-lg mx-auto">
-            <p className="text-gray-700 dark:text-gray-300">
+            <p>You are Seeing Dummy Data</p>
+            {DummyData.length > 0 ? (
+              <div className="space-y-4 overflow-x-auto">
+                {DummyData.map(({ id, originalUrl, shortUrl, clicks }) => (
+                  <UrlCard
+                    key={id}
+                    originalUrl={originalUrl}
+                    shortUrl={shortUrl}
+                    clicks={clicks}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-600 dark:text-gray-400 text-center">
+                You have not shortened any URLs yet.
+              </p>
+            )}
+            <p className="text-gray-700 dark:text-gray-300 mt-6">
               Please{" "}
               <a href="/login" className="text-blue-600 underline hover:text-blue-700">
                 login

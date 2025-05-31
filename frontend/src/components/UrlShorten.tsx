@@ -11,13 +11,16 @@ import { Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/app/store";
+import { useNavigate } from "react-router-dom";
 
 const UrlShorten = () => {
     const [isSubmit, setIsSubmit] = useState(false);
     const [shortUrl, setShortUrl] = useState('');
+    const navigate = useNavigate()
 
-    const token = useSelector((state: RootState) => state.auth.token)
+    const { isAuthenticated, token, isAuthChecked } = useSelector((state: RootState) => state.auth);
     console.log({token:token,username:''})
+
 
 
     const form = useForm<z.infer<typeof urlSchema>>({
@@ -29,6 +32,11 @@ const UrlShorten = () => {
 
     const onSubmit = async (data: z.infer<typeof urlSchema>) => {
         setIsSubmit(true);
+        if (!isAuthChecked) return;
+        if (!isAuthenticated || !token) {
+            navigate("/login");
+            return;
+        }
         try {
             const response = await axios.post('http://localhost:5000/api/short/', data,
                 {

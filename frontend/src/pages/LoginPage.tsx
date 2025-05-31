@@ -10,13 +10,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from 'lucide-react';
 import { loginType } from "@/features/auth/schemas/loginSchema";
-import {  useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import { login } from "@/features/reduxLogic/authReduxLogic/authSlice";
 
 const LoginPage = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [error, setError] = useState('');
 
   const form = useForm<z.infer<typeof loginType>>({
     resolver: zodResolver(loginType),
@@ -28,65 +29,73 @@ const LoginPage = () => {
 
   const onSubmit = async (data: z.infer<typeof loginType>) => {
     setIsSubmit(true);
-    console.log("DAta from loginpage :" , data)
+    setError('');
     try {
       const response = await axios.post('http://localhost:5000/api/login', data);
-      toast('success', {
-        description: response.data.message
-      });
+      toast.success(response.data.message);
 
-      console.log("response from login:",response)
-      dispatch(login({token:response.data.token,
-        username : response.data.username
+      dispatch(login({
+        token: response.data.token,
+        username: response.data.username
       }));
       navigate('/');
     } catch (error: any) {
-      console.error('Error during Login', error);
-      let errorMessage = error.response?.data.message;
-      toast('Login failed', {
-        description: errorMessage
-      });
+      const errorMessage = error.response?.data.message || "Login failed. Try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmit(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-gray-100 to-blue-100 dark:from-gray-900 dark:to-gray-800 px-4">
+      <div className="w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl rounded-2xl p-8 transition-all duration-300">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Log In</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Log in to get started</p>
+          <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">Welcome Back</h1>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Enter your details to continue</p>
         </div>
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <FormField
               name="email"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 dark:text-gray-300">Email</FormLabel>
-                  <Input {...field} className="dark:bg-gray-700 dark:text-white" />
+                  <FormLabel className="text-sm text-gray-700 dark:text-gray-300">Email Address</FormLabel>
+                  <Input
+                    {...field}
+                    placeholder="example@domain.com"
+                    className="dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500"
+                  />
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               name="password"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 dark:text-gray-300">Password</FormLabel>
-                  <Input type="password" {...field} className="dark:bg-gray-700 dark:text-white" />
+                  <FormLabel className="text-sm text-gray-700 dark:text-gray-300">Password</FormLabel>
+                  <Input
+                    type="password"
+                    {...field}
+                    placeholder="••••••••"
+                    className="dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500"
+                  />
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmit} className="w-full">
+
+            <Button type="submit" disabled={isSubmit} className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
               {isSubmit ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Please wait
+                  Logging in...
                 </>
               ) : (
                 'Log In'
@@ -94,13 +103,18 @@ const LoginPage = () => {
             </Button>
           </form>
         </Form>
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Not a member?{' '}
-            <Link to="/signup" className="text-blue-600 hover:underline dark:text-blue-400">
-              Sign Up
-            </Link>
-          </p>
+
+        {error && (
+          <div className="text-center mt-4">
+            <p className="text-sm text-red-500">{error}</p>
+          </div>
+        )}
+
+        <div className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
+          Don't have an account?{' '}
+          <Link to="/signup" className="text-blue-600 dark:text-blue-400 hover:underline">
+            Sign Up
+          </Link>
         </div>
       </div>
     </div>

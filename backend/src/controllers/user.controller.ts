@@ -46,6 +46,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
             success: true,
             message: "User Saved Successfully"
         })
+        console.log("done")
     }
     catch (error) {
         console.error(error);
@@ -57,6 +58,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 }
 
 export const login = async (req: Request, res: Response): Promise<void> => {
+
     try {
         const parsedData = loginType.safeParse(req.body)
         if (!parsedData.success) {
@@ -67,22 +69,26 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
+
         const { email, password } = parsedData.data;
 
+
         const user = await UserModel.findOne({ email });
+
         if (!user) {
-            res.status(400).json({
+            res.status(404).json({
                 success: false,
-                error: "User not Found"
+                message: "User not Found"
             })
             return;
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
+
         if (!passwordMatch) {
             res.status(400).json({
                 success: false,
-                error: "Incorrect Password"
+                message: "Incorrect Password"
             })
             return;
         }

@@ -9,7 +9,8 @@ export const userType = z.object(
             .max(20, { message: "Username cannot exceed 20 characters" }),
         email: z.string()
             .trim()
-            .email({ message: "Invalid Email Address" }),
+            .email({ message: "Invalid Email Address" })
+            .toLowerCase(),
         password: z.string().min(6)
     }
 )

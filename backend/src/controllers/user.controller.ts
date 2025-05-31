@@ -12,7 +12,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
-    console.log("Hare Krishna")
+
     try {
         const parsedData = userType.safeParse(req.body)
         if (!parsedData.success) {
@@ -46,7 +46,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
             success: true,
             message: "User Saved Successfully"
         })
-        console.log("done")
+
     }
     catch (error) {
         console.error(error);

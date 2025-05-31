@@ -2,16 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import UrlShorten from "@/components/UrlShorten";
 import type { RootState } from "@/app/store";
 import { useEffect, useState } from "react";
-import { getUrls } from "@/utils/getUrls";
-import { setUrls, type UrlType } from "@/features/reduxLogic/urlRedux/url.Slice";
-import { toast } from "sonner";
 import UrlCard from "@/components/UrlCard";
+
 
 const HomePage = () => {
   const { isAuthenticated, username, token } = useSelector((state: RootState) => state.auth);
-  const [isSubmit, setIsSubmit] = useState(false);
   const dispatch = useDispatch();
-  const [recentUrls, setRecentUrls] = useState<UrlType[]>([]);
+  const urls = useSelector((state: RootState) => state.url.urls)
+  const [baseUrl, setBaseUrl] = useState("");
 
   const DummyData = [
     {
@@ -30,40 +28,20 @@ const HomePage = () => {
 
   useEffect(() => {
     if (!isAuthenticated || !token) return;
-
-    (async () => {
-      try {
-        setIsSubmit(true);
-        const urls = await getUrls(token);
-        dispatch(setUrls(urls));
-        setRecentUrls(urls);
-      } catch (error: any) {
-        console.error("Error during URL fetching", error);
-        toast.error(error.response?.data?.message || "Something went wrong");
-      } finally {
-        setIsSubmit(false);
-      }
-    })();
+    if (typeof window !== "undefined") {
+      setBaseUrl(window.location.origin);
+    }
   }, [isAuthenticated, token, dispatch]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-100 to-white dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-gray-100 transition-colors duration-500">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-100 to-white dark:from-gray-900 dark:to-blue-900 text-gray-800 dark:text-gray-100 transition-colors duration-500">
       <header className="flex justify-between items-center max-w-7xl mx-auto p-4 sm:px-6 lg:px-8">
         <nav>
-          {isAuthenticated ? (
+          {isAuthenticated && (
             <span className="font-semibold text-lg">Hello, {username || "User"}</span>
-          ) : (
-            <a
-              href="/login"
-              className="inline-block px-5 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            >
-              Login
-            </a>
           )}
         </nav>
       </header>
-
-      {/* Hero Section */}
       <main className="flex-grow max-w-3xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
         <section className="text-center mb-16">
           <h2 className="text-4xl font-extrabold mb-4 tracking-tight">Shorten Your URLs Instantly</h2>
@@ -75,8 +53,6 @@ const HomePage = () => {
             <UrlShorten />
           </div>
         </section>
-
-        {/* Features Section */}
         <section className="mb-20 max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-10 text-center">
           {[
             {
@@ -108,17 +84,16 @@ const HomePage = () => {
           ))}
         </section>
 
-        {/* Recent URLs Section */}
         {isAuthenticated ? (
           <section className="max-w-4xl mx-auto">
             <h3 className="text-2xl font-bold mb-6">Your Recent Shortened URLs</h3>
-            {recentUrls.length > 0 ? (
+            {urls.length > 0 ? (
               <div className="space-y-4 overflow-x-auto">
-                {recentUrls.map(({ _id, originalUrl, shortId, clicks }) => (
+                {urls.map(({ _id, originalUrl, shortId, clicks }) => (
                   <UrlCard
                     key={_id}
                     originalUrl={originalUrl}
-                    shortUrl={`http://localhost:5173/${shortId}`}
+                    shortUrl={`${baseUrl}/${shortId}`}
                     clicks={clicks}
                   />
                 ))}
@@ -158,7 +133,7 @@ const HomePage = () => {
           </section>
         )}
       </main>
-    </div>
+    </div >
   );
 };
 

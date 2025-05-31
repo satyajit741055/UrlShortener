@@ -10,6 +10,9 @@ import RedirectPage from './pages/RedirectPage';
 import DashBoardPage from './pages/DashBoardPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import { login, logout } from './features/reduxLogic/authReduxLogic/authSlice';
+import { getUrls } from './utils/getUrls';
+import { setUrls } from './features/reduxLogic/urlRedux/url.Slice';
+import { toast } from 'sonner';
 
 
 function App() {
@@ -20,13 +23,23 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      dispatch(login({
-        token: token,
-        username: ''
-      }));
+      dispatch(login({ token, username: '' }));
+      (async () => {
+        try {
+          const urls = await getUrls(token);
+          dispatch(setUrls(urls));
+        } catch (error: any) {
+          console.error("Error during URL fetching", error);
+          toast.error(error.response?.data?.message || "Something went wrong");
+        }
+      })();
     } else {
       dispatch(logout());
     }
+  }, []);
+
+
+  useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add("dark");
     } else {

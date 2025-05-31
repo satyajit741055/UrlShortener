@@ -53,7 +53,6 @@ export const redirectToOriginalUrl = async (req: Request, res: Response): Promis
         const { redirect } = req.params;
         
         const url = await UrlModel.findOne({ shortId: redirect });
-        console.log("from redirectTOOrignialURL :" ,url)
         if (!url) {
             res.status(404).json({ success: false, error: "URL not found" });
             return;
@@ -106,7 +105,6 @@ export const analytics = async (req: Request, res: Response): Promise<void> => {
     try {
 
         const { id } = req.params;
-        console.log(id)
         const url = await UrlModel.findOne({ shortId: id });
 
         if (!url) {

@@ -22,7 +22,6 @@ const UrlCard: React.FC<Props> = ({ originalUrl, shortUrl, clicks }) => {
 
   return (
     <div className="bg-gray-800 text-white rounded-xl p-4 shadow-sm space-y-2">
-      {/* Original URL + Clicks */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
         <div className="flex items-center space-x-2">
           <p className="text-sm text-gray-400">Original URL:</p>
@@ -41,7 +40,7 @@ const UrlCard: React.FC<Props> = ({ originalUrl, shortUrl, clicks }) => {
         </div>
       </div>
 
-      {/* Shortened URL */}
+
       <div className="flex items-center space-x-2">
         <p className="text-sm text-gray-400">Short URL:</p>
         <a

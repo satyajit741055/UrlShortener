@@ -5,8 +5,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     const authHeader = req.headers.authorization;
     const token = authHeader?.split(" ")[1];
 
-    console.log("token from auth.ts: ",token)
-
     if (!token) {
         res.status(401).json({ error: "No token provided" });
         return;

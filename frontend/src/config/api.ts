@@ -1,4 +1,4 @@
-const isDevelopment = import.meta.env.MODE === 'development';
+const isDevelopment = import.meta.env.VITE_MODE === 'development';
 
 export const API_BASE_URL = isDevelopment 
   ? import.meta.env.VITE_API_URL_DEV 

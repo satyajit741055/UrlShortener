@@ -7,6 +7,7 @@ import { toast } from "sonner";
 const RedirectPage = () => {
   const { shortId } = useParams();
   const [error, setError] = useState("");
+  
 
   useEffect(() => {
     const redirect = async () => {
@@ -14,8 +15,6 @@ const RedirectPage = () => {
         const response = await axios.get(`${API_BASE_URL_SAFE}/api/${shortId}`)
         console.log("response from RedirectPage: ",response)
         const redirectURL = response.data.url;
-        
-
         if (redirectURL) {
           window.location.href = redirectURL;
         } else {

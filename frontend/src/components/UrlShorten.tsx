@@ -19,6 +19,7 @@ const UrlShorten = () => {
     const [shortUrl, setShortUrl] = useState('');
     const navigate = useNavigate()
     const [baseUrl, setBaseUrl] = useState("");
+    console.log("API URL ", API_BASE_URL_SAFE)
 
     const { isAuthenticated, token, isAuthChecked } = useSelector((state: RootState) => state.auth);
     console.log({ token: token, username: '' })
@@ -54,7 +55,7 @@ const UrlShorten = () => {
                 }
             );
             toast.success(response.data.message);
-            const generatedUrl = `${baseUrl}` + response.data.shortId;
+            const generatedUrl = `${baseUrl}/` + response.data.shortId;
 
             setShortUrl(generatedUrl);
 

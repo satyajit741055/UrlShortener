@@ -4,7 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 import { logout } from "@/features/reduxLogic/authReduxLogic/authSlice";
 import ToggleTheme from "./ToggleTheme";
 import { useState } from "react";
-import { Menu, X } from "lucide-react"; // Icon for hamburger and close
+import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
@@ -20,7 +20,7 @@ const Navbar = () => {
     <nav className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          
+
           <Link
             to="/"
             className="text-2xl font-extrabold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
@@ -33,8 +33,7 @@ const Navbar = () => {
             <NavLink
               to="/homepage"
               className={({ isActive }) =>
-                `text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold text-lg transition-colors ${
-                  isActive ? "underline underline-offset-4 decoration-2 text-blue-600 dark:text-blue-400" : ""
+                `text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold text-lg transition-colors ${isActive ? "underline underline-offset-4 decoration-2 text-blue-600 dark:text-blue-400" : ""
                 }`
               }
             >
@@ -43,18 +42,18 @@ const Navbar = () => {
             <NavLink
               to="/dashboard"
               className={({ isActive }) =>
-                `text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold text-lg transition-colors ${
-                  isActive ? "underline underline-offset-4 decoration-2 text-blue-600 dark:text-blue-400" : ""
+                `text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold text-lg transition-colors ${isActive ? "underline underline-offset-4 decoration-2 text-blue-600 dark:text-blue-400" : ""
                 }`
               }
             >
               Dashboard
             </NavLink>
           </div>
+          
 
           
-          <div className="flex items-center space-x-4">
-            <ToggleTheme />
+          <div className="hidden md:flex items-center space-x-4">
+            
             {isAuthenticated ? (
               <Button
                 onClick={handleLogout}
@@ -66,6 +65,7 @@ const Navbar = () => {
               <>
                 <Link
                   to="/login"
+
                   className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                 >
                   Login
@@ -78,8 +78,10 @@ const Navbar = () => {
                 </Link>
               </>
             )}
+          </div>
 
-           
+          <div className="flex items-center space-x-2 md:space-x-4">
+            <ToggleTheme />
             <button
               className="md:hidden text-gray-700 dark:text-gray-300"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -89,15 +91,15 @@ const Navbar = () => {
           </div>
         </div>
 
-        
+
         {mobileMenuOpen && (
           <div className="md:hidden mt-2 space-y-2 pb-4">
+            
             <NavLink
               to="/homepage"
               onClick={() => setMobileMenuOpen(false)}
               className={({ isActive }) =>
-                `block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold ${
-                  isActive ? "underline text-blue-600 dark:text-blue-400" : ""
+                `block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold ${isActive ? "underline text-blue-600 dark:text-blue-400" : ""
                 }`
               }
             >
@@ -107,13 +109,40 @@ const Navbar = () => {
               to="/dashboard"
               onClick={() => setMobileMenuOpen(false)}
               className={({ isActive }) =>
-                `block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold ${
-                  isActive ? "underline text-blue-600 dark:text-blue-400" : ""
+                `block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold ${isActive ? "underline text-blue-600 dark:text-blue-400" : ""
                 }`
               }
             >
               Dashboard
             </NavLink>
+            {!isAuthenticated ? (
+              <>
+                <NavLink
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold"
+                >
+                  Login
+                </NavLink>
+                <NavLink
+                  to="/signup"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold"
+                >
+                  Signup
+                </NavLink>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setMobileMenuOpen(false);
+                }}
+                className="block w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900 font-semibold"
+              >
+                Log Out
+              </button>
+            )}
           </div>
         )}
       </div>

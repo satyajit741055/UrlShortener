@@ -22,6 +22,16 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         }
 
         const { username, email, password } = parsedData.data;
+        const userExist = await UserModel.findOne({ email });
+        console.log(userExist)
+
+        if (userExist) {
+            res.status(404).json({
+                success: false,
+                message: "User already Exist"
+            })
+            return;
+        }
         const hashedPassword = await bcrypt.hash(password, 5);
 
         if (!hashedPassword) {

@@ -15,6 +15,8 @@ import { API_BASE_URL_SAFE } from "@/config/api";
 const Signup = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
+  const [error, setError] = useState('');
+  console.log(API_BASE_URL_SAFE)
 
   const form = useForm<z.infer<typeof userType>>({
     resolver: zodResolver(userType),
@@ -35,6 +37,7 @@ const Signup = () => {
       console.error('Error during Sign-up', error);
       let errorMessage = error.response?.data.message || "Something went wrong";
       toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setIsSubmit(false);
     }
@@ -123,7 +126,11 @@ const Signup = () => {
             </Button>
           </form>
         </Form>
-
+        {error && (
+          <div className="text-center mt-4">
+            <p className="text-sm text-red-500">{error}</p>
+          </div>
+        )}
         <div className="text-center mt-6">
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Already a member?{' '}

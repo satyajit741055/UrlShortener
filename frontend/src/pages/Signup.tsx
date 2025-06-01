@@ -46,8 +46,8 @@ const Signup = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-indigo-900 px-4 transition-colors duration-500">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl ring-1 ring-gray-200 dark:ring-gray-700 p-8 transition-all">
-        {/* Optional: Add a logo here */}
-        {/* <img src="/logo.svg" alt="Logo" className="h-10 mx-auto mb-6" /> */}
+        {/* TODO: Add a logo here */}
+       
 
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 via-blue-500 to-purple-500 text-transparent bg-clip-text">

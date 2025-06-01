@@ -23,7 +23,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 
         const { username, email, password } = parsedData.data;
         const userExist = await UserModel.findOne({ email });
-        console.log(userExist)
+       
 
         if (userExist) {
             res.status(404).json({

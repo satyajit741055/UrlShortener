@@ -99,7 +99,7 @@ const AnalyticsPage = () => {
 
         {urlAnalytics?.analytics?.length ? (
           <>
-            {/* Line Chart Section */}
+           
             <section className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
               <h2 className="text-xl font-semibold text-indigo-700 dark:text-indigo-300 mb-4">
                 Click Activity Over Time

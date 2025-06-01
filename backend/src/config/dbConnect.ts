@@ -13,7 +13,7 @@ async function dbConnect() {
     console.log("Database already connected.");
     return;
   }
-  console.log(process.env.MONGOOSE_URL)
+  
 
   if (!process.env.MONGOOSE_URL) {
     console.error("MONGOOSE_URL is not defined in environment variables.");

@@ -19,7 +19,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [error, setError] = useState('');
-
+  console.log(API_BASE_URL_SAFE)
   const form = useForm<z.infer<typeof loginType>>({
     resolver: zodResolver(loginType),
     defaultValues: {

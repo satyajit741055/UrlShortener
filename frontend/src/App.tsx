@@ -16,7 +16,6 @@ import { toast } from 'sonner';
 
 
 function App() {
-  console.log("App rendered");
   const isDark = useSelector((state: RootState) => state.theme.isDark);
   const dispatch = useDispatch()
 

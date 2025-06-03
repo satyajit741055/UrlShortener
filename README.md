@@ -20,3 +20,10 @@ A production-ready URL shortener application with analytics, authentication, and
 - URL expiration & password protection
 - Admin dashboard for managing URLs
 - Improved analytics with charts over time
+
+
+## 🚀 Deployed On
+
+- **Frontend**: [Vercel Deployment](https://url-shortener-three-navy.vercel.app/)
+- **Backend**: [Render API](https://urlshortener-fc5z.onrender.com)
+

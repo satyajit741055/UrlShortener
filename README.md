@@ -4,6 +4,8 @@ A production-ready URL shortener application with analytics, authentication, and
 
 ---
 
+![App Screenshot](./public/WebsiteImage.png)
+
 ## 🚀 Features
 
 - 🔗 URL shortening with unique IDs

@@ -1,54 +1,134 @@
-# React + TypeScript + Vite
+# URL Shortener App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, full-stack URL shortening application built with React, Redux Toolkit, TypeScript, and Tailwind CSS. Features user authentication, analytics, responsive design, dark mode, and a sleek UI with charts.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Quick URL shortening** with validation using Zod schema  
+- **User Authentication** with login, signup, and protected routes  
+- **Dashboard** displaying analytics including browser/device breakdown pie charts  
+- **Copy to clipboard** functionality for shortened URLs  
+- **Responsive and accessible UI** with dark and light theme toggle  
+- **Redux Toolkit** for global state management  
+- **React Router** for navigation  
+- **Reusable components** like Navbar, Footer, URL Cards, and forms  
+- **Loading and error handling** with toast notifications  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Tech Stack
+
+- React + TypeScript  
+- Redux Toolkit  
+- React Router DOM  
+- Tailwind CSS (Dark Mode support)  
+- Zod + React Hook Form (form validation)  
+- Recharts (analytics visualization)  
+- Axios (API calls)  
+- UAParser.js (User agent parsing for analytics)  
+- Sonner (toast notifications)  
+- Lucide-react (icons)  
+
+---
+
+## Installation
+
+1. Clone the repo:
+
+   ```bash
+   git clone https://github.com/yourusername/url-shortener.git
+   cd url-shortener 
+   ```
+2. Install Dependencies:
+    ```bash
+   npm install
+   ```
+3. Run the development server:
+    ```bash
+   npm run dev
+   ```
+
+
+## **Usage**
+   - Access the app at http://localhost:3000
+   - Sign up or log in to create short URLs
+   - View your URLs and their click stats on the dashboard
+   - Toggle dark/light mode via the theme switcher
+   - Use the copy button on short URLs for quick sharing
+
+## **Project Structure**
+```
+FRONTEND/
+├── node_modules/
+├── public/
+├── src/
+│   ├── app/
+│   │   └── store.ts
+│   ├── assets/
+│   │   └── react.svg
+│   ├── components/
+│   │   ├── ui/
+│   │   ├── Card.tsx
+│   │   ├── ClicksLineChart.tsx
+│   │   ├── ClicksTable.tsx
+│   │   ├── DeviceBreakdownPieChart.tsx
+│   │   ├── Footer.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── ToggleTheme.tsx
+│   │   ├── UrlCard.tsx
+│   │   └── UrlShorten.tsx
+│   ├── config/
+│   │   └── api.ts
+│   ├── features/
+│   │   ├── auth_schemas/
+│   │   │   ├── loginSchema.ts
+│   │   │   └── signupSchema.ts
+│   │   ├── urlShortener_schemas/
+│   │   │   └── urlShema.ts
+│   │   ├── reduxLogic/
+│   │   │   └── authSlice.ts
+│   │   │    ├── theme/
+│   │   │       └── themeSlice.ts
+│   │   │    ├── urlRedux/
+│   │   │       └── urlSlice.ts
+│   │   │
+│   ├── layouts/
+│   │   └── Layout.tsx
+│   ├── lib/
+│   ├── pages/
+│   │   ├── AnalyticPage.tsx
+│   │   ├── DashBoardPage.tsx
+│   │   ├── HomePage.tsx
+│   │   ├── LoginPage.tsx
+│   │   ├── RedirectPage.tsx
+│   │   └── SignupPage.tsx
+│   ├── utils/
+│   │   ├── getClicksByDate.ts
+│   │   └── getUrl.ts
+│   ├── App.tsx
+│   ├── index.css
+│   ├── main.tsx
+│   └── vite-env.d.ts
+├── .env
+├── .env.example
+├── .gitignore
+├── components.json
+├── eslint.config.js
+├── index.html
+├── package.json
+├── package-lock.json
+├── postcss.config.js
+├── README.md
+└── tailwind.config.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## **Future Improvements**
+   - Add link expiration & password protection
+   - User profile management
+   - More detailed analytics (geolocation, time-based stats)
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+
+If you find this project helpful, feel free to ⭐ star it on GitHub!
